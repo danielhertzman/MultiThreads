@@ -22,6 +22,4 @@ public class TriangleController implements Runnable {
 	public JLabel getImageLbl() {
 		return lbl;
 	}
-	
-
 }
