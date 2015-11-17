@@ -36,14 +36,14 @@ public class GUIMutex
 	/**
 	 * Starts the application
 	 */
-	public void Start()
+	public void start()
 	{
 		frame = new JFrame();
 		frame.setBounds(0, 0, 601, 482);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLayout(null);
 		frame.setTitle("Concurrent Read/Write");
-		InitializeGUI();					// Fill in components
+		initializeGUI();					// Fill in components
 		frame.setVisible(true);
 		frame.setResizable(false);			// Prevent user from change size
 		frame.setLocationRelativeTo(null);	// Start middle screen
@@ -52,7 +52,7 @@ public class GUIMutex
 	/**
 	 * Sets up the GUI with components
 	 */
-	private void InitializeGUI()
+	private void initializeGUI()
 	{
 		// First, create the static components
 		// First the 4 static texts
@@ -131,5 +131,9 @@ public class GUIMutex
 		btnClear.setBounds(26, 303, 75, 23);
 		btnClear.setEnabled(false);
 		pnlTest.add(btnClear);
+	}
+	
+	public static void main(String[] args) {
+		new GUIMutex().start();
 	}
 }
