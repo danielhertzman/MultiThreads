@@ -24,7 +24,7 @@ public class DisplayController implements Runnable {
 				Thread.sleep(500);
 				lbl.setLocation(rand.nextInt(150),rand.nextInt(150));
 				
-			} catch (InterruptedException e) {stop = true;}
+			} catch (InterruptedException e) { stop = true; }
 		}
 	}
 	

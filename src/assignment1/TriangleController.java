@@ -6,10 +6,11 @@ import javax.swing.JLabel;
 public class TriangleController implements Runnable {
 	
 	private ImageIcon image;
-	private JLabel lbl = new JLabel();
+	private JLabel lbl;
 	
 	public TriangleController() {
-		image = new ImageIcon("/Users/danielhertzman-ericson/Desktop/gobbe.png");
+		image = new ImageIcon("/Users/danielhertzman-ericson/Desktop/gobbe.jpg");
+		lbl = new JLabel();
 		lbl.setIcon(image);
 	}
 

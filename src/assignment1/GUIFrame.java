@@ -136,11 +136,6 @@ public class GUIFrame implements ActionListener
 		btnTriangle.addActionListener(this);
 		pnlTriangle.add(btnTriangle);
 		
-		ImageIcon image = new ImageIcon("/Users/danielhertzman-ericson/Desktop/triangle.png");
-		JLabel lbl = new JLabel();
-		lbl.setIcon(image);
-		pnlTriangle.add(lbl);
-		
 		btnTStop = new JButton("Stop");
 		btnTStop.setBounds(135, 226, 75, 23);
 		pnlTriangle.add(btnTStop);
@@ -185,6 +180,7 @@ public class GUIFrame implements ActionListener
 				
 				mc.stopMusic();
 				t1.interrupt();
+				System.out.println(t1.isInterrupted());
 				t1 = null;
 				
 			}		
@@ -221,7 +217,9 @@ public class GUIFrame implements ActionListener
 		
 		if (e.getSource() == btnTriangle) {
 			
-			
+			tc = new TriangleController();
+			pnlRotate.add(tc.getImageLbl());
+			pnlRotate.updateUI();
 			
 		}
 			
