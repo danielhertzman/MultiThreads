@@ -3,12 +3,13 @@ package assignment1;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-public class TriangleController implements Runnable {
+public class RotatingController implements Runnable {
 	
 	private ImageIcon image;
 	private JLabel lbl;
+	private boolean stop;
 	
-	public TriangleController() {
+	public RotatingController() {
 		image = new ImageIcon("/Users/danielhertzman-ericson/Desktop/gobbe.jpg");
 		lbl = new JLabel();
 		lbl.setIcon(image);
@@ -16,7 +17,17 @@ public class TriangleController implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		stop = false;
+		
+		while (!stop) {
+			
+			try {
+				Thread.sleep(300);
+				System.out.println("rotating :)");
+			} catch(InterruptedException e) { stop = true; }
+			
+		}
+		
 		
 	}
 	

@@ -32,14 +32,15 @@ public class MusicController implements Runnable {
 
 	@Override
 	public void run() {
-		
 		stop = false;
 		soundFile = new File(path);
 
 		while (!stop) {
 
 			try {
+				
 				Thread.sleep(0);
+				
 				try {
 					audioStream = AudioSystem.getAudioInputStream(soundFile);
 				} catch (Exception e) {}

@@ -30,7 +30,7 @@ public class GUIFrame implements ActionListener
 	private JPanel pnlRotate;	// The panel to move graphics in
 	private MusicController mc;
 	private DisplayController dc;
-	private TriangleController tc;
+	private RotatingController tc;
 	private Thread t1;
 	private Thread t2;
 	private Thread t3;
@@ -138,6 +138,7 @@ public class GUIFrame implements ActionListener
 		
 		btnTStop = new JButton("Stop");
 		btnTStop.setBounds(135, 226, 75, 23);
+		btnTStop.addActionListener(this);
 		pnlTriangle.add(btnTStop);
 		
 		pnlRotate = new JPanel();
@@ -180,7 +181,6 @@ public class GUIFrame implements ActionListener
 				
 				mc.stopMusic();
 				t1.interrupt();
-				System.out.println(t1.isInterrupted());
 				t1 = null;
 				
 			}		
@@ -217,12 +217,31 @@ public class GUIFrame implements ActionListener
 		
 		if (e.getSource() == btnTriangle) {
 			
-			tc = new TriangleController();
-			pnlRotate.add(tc.getImageLbl());
-			pnlRotate.updateUI();
-			
+			if (tc == null) {
+				
+				tc = new RotatingController();
+				t3 = new Thread(tc);
+				pnlRotate.add(tc.getImageLbl());
+				pnlRotate.updateUI();
+				t3.start();
+				
+			} else {
+				
+				t3 = new Thread(tc);
+				t3.start();
+				
+			}
 		}
-			
+		
+		if (e.getSource() == btnTStop) {
+
+			if (t3 != null) {
+
+				t3.interrupt();
+				t3 = null;
+				System.out.println("stopped rotating :)");
+				
+			}
+		}
 	}
-	
 }
