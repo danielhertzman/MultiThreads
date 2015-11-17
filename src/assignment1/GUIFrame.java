@@ -30,6 +30,7 @@ public class GUIFrame implements ActionListener
 	private JPanel pnlRotate;	// The panel to move graphics in
 	private MusicController mc;
 	private DisplayController dc;
+	private TriangleController tc;
 	private Thread t1;
 	private Thread t2;
 	private Thread t3;
@@ -132,7 +133,13 @@ public class GUIFrame implements ActionListener
 		// Add buttons and drawing panel to this panel
 		btnTriangle = new JButton("Start Rotate");
 		btnTriangle.setBounds(10, 226, 121, 23);
+		btnTriangle.addActionListener(this);
 		pnlTriangle.add(btnTriangle);
+		
+		ImageIcon image = new ImageIcon("/Users/danielhertzman-ericson/Desktop/triangle.png");
+		JLabel lbl = new JLabel();
+		lbl.setIcon(image);
+		pnlTriangle.add(lbl);
 		
 		btnTStop = new JButton("Stop");
 		btnTStop.setBounds(135, 226, 75, 23);
@@ -149,7 +156,6 @@ public class GUIFrame implements ActionListener
 	
 
 
-	@SuppressWarnings("deprecation") // what the heck does this mean?
 	@Override
 	public void actionPerformed(ActionEvent e) 
 	{
@@ -166,48 +172,56 @@ public class GUIFrame implements ActionListener
 		if (e.getSource() == btnPlay) {
 			
 			if (t1 == null) {
+				
 				t1 = new Thread(mc);		
 				t1.start();
-			} else
-				t1.resume(); // resumes the thread
+				
+			} 
 		} 
 		
 		if (e.getSource() == btnStop) {
 			
-			if (t1.isAlive()) {
-//				mc.stopMusic();
-//				t1.interrupt();
-//				t1 = null;
-//				System.out.println("t1 is interrupted: " + t1.isInterrupted());
+			if (t1 != null) {
 				
-				t1.suspend(); // pauses the thread without stopping it. Can be resumed
-			}
+				mc.stopMusic();
+				t1.interrupt();
+				t1 = null;
 				
-				
+			}		
 		}
 		
 		if (e.getSource() == btnDisplay) {
+			
 			if (dc == null) {
+				
 				dc = new DisplayController();
 				t2 = new Thread(dc);
 				pnlMove.add(dc.getLabel());
 				pnlMove.updateUI();
 				t2.start();
-			} else
-				t2.resume(); // resumes the thread
+				
+			} else {
+				
+				t2 = new Thread(dc);
+				t2.start();
+				
+			}
 		}
 		
 		if (e.getSource() == btnDStop) {
-			if (t2.isAlive()) {
-				t2.suspend(); // pauses the thread without stopping it. Can be resumed
+			
+			if (t2 != null) {
+				
+				t2.interrupt();
+				t2 = null;
+				
 			}
 				
 		}
 		
 		if (e.getSource() == btnTriangle) {
 			
-			t3 = new Thread();
-			t3.start();
+			
 			
 		}
 			
