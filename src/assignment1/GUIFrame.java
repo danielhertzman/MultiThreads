@@ -28,9 +28,9 @@ public class GUIFrame implements ActionListener
 	private JLabel lblPlayURL;	// The sound file path
 	private JPanel pnlMove;		// The panel to move display in
 	private JPanel pnlRotate;	// The panel to move graphics in
-	private MusicController mc;
-	private DisplayController dc;
-	private RotatingController tc;
+	private MusicController mc; // MusicController
+	private DisplayController dc; // DisplayController
+	private RotatingController tc; // RotatingController
 	private Thread t1;
 	private Thread t2;
 	private Thread t3;
@@ -153,10 +153,11 @@ public class GUIFrame implements ActionListener
 
 
 	@Override
-	public void actionPerformed(ActionEvent e) 
-	{
+	public void actionPerformed(ActionEvent e) {
 		
-		
+		/*
+		 * Opens a window that lets you chose which song you want
+		 */
 		if (e.getSource() == btnOpen) {
 			
 			mc = new MusicController();
@@ -165,6 +166,9 @@ public class GUIFrame implements ActionListener
 			
 		}
 		
+		/*
+		 * Plays the chosen song
+		 */
 		if (e.getSource() == btnPlay) {
 			
 			if (t1 == null) {
@@ -175,6 +179,9 @@ public class GUIFrame implements ActionListener
 			} 
 		} 
 		
+		/*
+		 * Stops the song and finally interrupts the thread
+		 */
 		if (e.getSource() == btnStop) {
 			
 			if (t1 != null) {
@@ -186,6 +193,10 @@ public class GUIFrame implements ActionListener
 			}		
 		}
 		
+		/*
+		 * Starts the thread that makes the text 
+		 * jump around to random locations
+		 */
 		if (e.getSource() == btnDisplay) {
 			
 			if (dc == null) {
@@ -204,6 +215,9 @@ public class GUIFrame implements ActionListener
 			}
 		}
 		
+		/*
+		 * Interrupts the thread
+		 */
 		if (e.getSource() == btnDStop) {
 			
 			if (t2 != null) {
@@ -212,16 +226,18 @@ public class GUIFrame implements ActionListener
 				t2 = null;
 				
 			}
-				
 		}
 		
+		/*
+		 * Start the rotation
+		 */
 		if (e.getSource() == btnTriangle) {
 			
 			if (tc == null) {
 				
 				tc = new RotatingController();
 				t3 = new Thread(tc);
-				pnlRotate.add(tc.getImageLbl());
+				pnlRotate.add(tc.getIconLbl());
 				pnlRotate.updateUI();
 				t3.start();
 				
@@ -233,6 +249,9 @@ public class GUIFrame implements ActionListener
 			}
 		}
 		
+		/*
+		 * Interrupts the rotation thread
+		 */
 		if (e.getSource() == btnTStop) {
 
 			if (t3 != null) {

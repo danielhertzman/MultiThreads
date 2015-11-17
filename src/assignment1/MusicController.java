@@ -6,6 +6,13 @@ import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.sound.sampled.*;
 
+/**
+ * Implements the Runnable interface and creates
+ * a small inside media player that allows you to
+ * play .waw-files.
+ * @author danielhertzman-ericson
+ *
+ */
 public class MusicController implements Runnable {
 	
 	private String description;
@@ -20,6 +27,9 @@ public class MusicController implements Runnable {
 		selectFile();
 	}
 	
+	/**
+	 * Open the directory manager that allows you to choose a file
+	 */
 	private void selectFile() {
 		JFileChooser fc = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("wav", "WAV");
@@ -35,6 +45,9 @@ public class MusicController implements Runnable {
 		stop = false;
 		soundFile = new File(path);
 
+		/*
+		 * Creats an audio stream that plays .wav-files
+		 */
 		while (!stop) {
 
 			try {
@@ -59,7 +72,7 @@ public class MusicController implements Runnable {
 				sourceLine.start();
 
 				int nBytesRead = 0;
-				byte[] abData = new byte[128000];
+				byte[] abData = new byte[128000]; // 128 kbps 
 				while (nBytesRead != -1) {
 
 					try {
@@ -81,14 +94,25 @@ public class MusicController implements Runnable {
 		}
 	}
 
+	/**
+	 * Returns the songs file path
+	 * @return file path
+	 */
 	public String getFilePath() {
 		return path;
 	}
 	
+	/**
+	 * Returns the description of the song
+	 * @return the description
+	 */
 	public String getDescription() {
 		return description;
 	}
 	
+	/**
+	 * Closes the source stream
+	 */
 	public void stopMusic() {
 		sourceLine.stop();
 	}
