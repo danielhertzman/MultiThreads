@@ -239,7 +239,6 @@ public class GUIFrame implements ActionListener
 
 				t3.interrupt();
 				t3 = null;
-				System.out.println("stopped rotating :)");
 				
 			}
 		}
