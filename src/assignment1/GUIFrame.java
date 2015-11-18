@@ -186,8 +186,7 @@ public class GUIFrame implements ActionListener
 			
 			if (t1 != null) {
 				
-				mc.stopMusic();
-				t1.interrupt();
+				mc.stop();
 				t1 = null;
 				
 			}		

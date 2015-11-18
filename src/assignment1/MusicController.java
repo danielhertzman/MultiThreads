@@ -18,10 +18,7 @@ public class MusicController implements Runnable {
 	private String description;
 	private String path;
 	private File soundFile;
-	private AudioInputStream audioStream;
-	private AudioFormat audioFormat;
-	private SourceDataLine sourceLine;
-	private boolean stop;
+	private Clip clip;
 	
 	public MusicController() {
 		selectFile();
@@ -42,57 +39,19 @@ public class MusicController implements Runnable {
 
 	@Override
 	public void run() {
-		stop = false;
 		soundFile = new File(path);
-
+		
 		/*
 		 * Creats an audio stream that plays .wav-files
 		 */
-		while (!stop) {
-
-			try {
+		try {
+			clip = AudioSystem.getClip();
+			AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
+			clip.open(ais);
+			clip.start();
+		} catch (RuntimeException | LineUnavailableException | IOException | UnsupportedAudioFileException e) {}
 				
-				Thread.sleep(0);
-				
-				try {
-					audioStream = AudioSystem.getAudioInputStream(soundFile);
-				} catch (Exception e) {}
-
-				audioFormat = audioStream.getFormat();
-
-				DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-				try {
-					sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-					sourceLine.open(audioFormat);
-				} catch (LineUnavailableException e) {
-					e.printStackTrace();
-					System.exit(1);
-				} catch (Exception e) {}
-
-				sourceLine.start();
-
-				int nBytesRead = 0;
-				byte[] abData = new byte[128000]; // 128 kbps 
-				while (nBytesRead != -1) {
-
-					try {
-
-						nBytesRead = audioStream.read(abData, 0, abData.length);
-
-					} catch (IOException e) {}
-
-					if (nBytesRead >= 0) {
-						@SuppressWarnings("unused")
-						int nBytesWritten = sourceLine.write(abData, 0, nBytesRead);
-					}
-				}
-
-				sourceLine.drain();
-				sourceLine.close();
-				
-			} catch (InterruptedException e) { stop = true; }
-		}
-	}
+	} 
 
 	/**
 	 * Returns the songs file path
@@ -110,11 +69,12 @@ public class MusicController implements Runnable {
 		return description;
 	}
 	
-	/**
-	 * Closes the source stream
-	 */
-	public void stopMusic() {
-		sourceLine.stop();
+	public void stop() {
+		
+		if (clip.isActive()) {
+			clip.stop();
+		}
+		
 	}
 
 }
