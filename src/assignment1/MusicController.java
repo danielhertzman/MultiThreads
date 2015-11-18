@@ -45,10 +45,12 @@ public class MusicController implements Runnable {
 		 * Creats an audio stream that plays .wav-files
 		 */
 		try {
+			
 			clip = AudioSystem.getClip();
 			AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile);
 			clip.open(ais);
 			clip.start();
+			
 		} catch (RuntimeException | LineUnavailableException | IOException | UnsupportedAudioFileException e) {}
 				
 	} 
