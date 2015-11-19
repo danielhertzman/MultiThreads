@@ -2,16 +2,20 @@ package assignment2;
 
 public class MainForm {
 	
-	private Reader r;
-	private Writer w;
+	private boolean sync;
+	private String txt;
 	
-	public MainForm() {
-		r = new Reader();
-		new Thread(r).start();
-	}
-	
-	public static void main(String[] args) {
-		new MainForm();
+	public MainForm(String txt, boolean sync) {
+		this.txt = txt;
+		this.sync = sync;
+		System.out.println(txt + " " + sync);
 	}
 
+	public boolean isSync() {
+		return sync;
+	}
+
+	public String getTxt() {
+		return txt;
+	}
 }

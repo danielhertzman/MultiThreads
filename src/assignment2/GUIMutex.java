@@ -1,13 +1,15 @@
 package assignment2;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 /**
  * The GUI for assignment 2
  */
-public class GUIMutex 
+public class GUIMutex implements ActionListener
 {
 	/**
 	 * These are the components you need to handle.
@@ -112,6 +114,7 @@ public class GUIMutex
 		// The run button
 		btnRun = new JButton("Run");
 		btnRun.setBounds(26, 150, 75, 23);
+		btnRun.addActionListener(this);
 		pnlTest.add(btnRun);
 		JLabel lab6 = new JLabel("Running status:");
 		lab6.setBounds(23, 199, 110, 13);
@@ -133,7 +136,23 @@ public class GUIMutex
 		pnlTest.add(btnClear);
 	}
 	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() == btnRun) {
+			
+			new MainForm(txtTrans.getText(), bSync.isSelected());
+			
+		}
+		
+	}
+	
+	
+	
+//***********************************************************************
 	public static void main(String[] args) {
 		new GUIMutex().start();
 	}
+
 }
