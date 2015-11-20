@@ -7,6 +7,7 @@ public class Reader implements Runnable {
 	private boolean sync;
 	private String txt;
 	private char[] cArray;
+	private CharacterBuffer cb;
 	
 	public Reader(MainForm mf) {
 		this.mf = mf;
@@ -31,18 +32,18 @@ public class Reader implements Runnable {
 		while (index != cArray.length && running) {
 
 			try {
-				Thread.sleep(500);
-				System.out.println(cArray[index]);
+				Thread.sleep(300);
+				syncRead(index);
 				index++;
 			} catch (InterruptedException e) { running = false; }
 		}
 	}
 
-	private synchronized void syncRead() {
-		
+	private synchronized void syncRead(int index) {
+		cb = new CharacterBuffer(cArray[index]);
 	}
 	
-	private void asyncRead() {
+	private void asyncRead(int index) {
 		
 	}
 }

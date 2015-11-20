@@ -148,7 +148,6 @@ public class GUIMutex implements ActionListener
 				pnlRes.setBackground(Color.RED);
 			}
 		}
-		
 	}
 	
 	

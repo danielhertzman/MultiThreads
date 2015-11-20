@@ -7,6 +7,7 @@ public class CharacterBuffer {
 	
 	public CharacterBuffer(char current) {
 		this.current = current;
+		System.out.println(current);
 	}
 	
 	public char getCurrent() {

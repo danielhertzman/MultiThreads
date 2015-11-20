@@ -10,7 +10,6 @@ public class MainForm {
 	public MainForm(String txt, boolean sync) {
 		this.txt = txt;
 		this.sync = sync;
-		
 		initialize();
 	}
 	
