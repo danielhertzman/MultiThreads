@@ -144,6 +144,9 @@ public class GUIMutex implements ActionListener
 			
 			new MainForm(txtTrans.getText(), bSync.isSelected());
 			
+			if (!bSync.isSelected()) {
+				pnlRes.setBackground(Color.RED);
+			}
 		}
 		
 	}

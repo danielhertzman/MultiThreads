@@ -2,35 +2,47 @@ package assignment2;
 
 public class Reader implements Runnable {
 	
-	private char c;
 	private boolean running;
+	private MainForm mf;
+	private boolean sync;
+	private String txt;
+	private char[] cArray;
 	
-	public Reader() {}
-	
-	public void read(char c) {
-		this.c = c;
+	public Reader(MainForm mf) {
+		this.mf = mf;
+		sync = mf.isSync();
+		txt = mf.getTxt();
+		cArray = new char[txt.length()];
 		
-		// do stuff	
+		for (int i = 0; i < txt.length(); i++) {
+			cArray[i] = txt.charAt(i);
+		}
 	}
 	
-	public char getCharacter() {
-		return c;
+	public String getTxt() {
+		return txt;
 	}
 
 	@Override
 	public void run() {
 		running = true;
+		int index = 0;
 		
-		while (running) {
+		while (index != cArray.length && running) {
 
 			try {
 				Thread.sleep(500);
-				System.out.println("yolo");
-				
-			} catch (InterruptedException e) {
-				running = false;
-			}
+				System.out.println(cArray[index]);
+				index++;
+			} catch (InterruptedException e) { running = false; }
 		}
+	}
+
+	private synchronized void syncRead() {
+		
+	}
+	
+	private void asyncRead() {
 		
 	}
 }
