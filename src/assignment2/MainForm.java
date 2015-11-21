@@ -16,10 +16,10 @@ public class MainForm {
 	private void initialize() {
 		
 		if (sync) {
-			tSync = new Thread(new Reader(this));
+			tSync = new Thread(new Writer(this));
 			tSync.start();
 		} else {
-			tNotSync = new Thread(new Reader(this));
+			tNotSync = new Thread(new Writer(this));
 			tNotSync.start();
 		}
 		

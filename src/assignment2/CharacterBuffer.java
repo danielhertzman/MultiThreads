@@ -1,8 +1,8 @@
 package assignment2;
 
 public class CharacterBuffer {
-	private Reader r;
-	private Writer w;
+	private Writer r;
+	private Reader w;
 	private char current;
 	
 	public CharacterBuffer(char current) {
