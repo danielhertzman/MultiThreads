@@ -35,11 +35,11 @@ public class Writer implements Runnable {
 				Thread.sleep(300);
 				
 				if (sync) {
-					syncRead(index);
+					syncWrite(index);
 				}
 
 				else {
-					asyncRead(index);
+					asyncWrite(index);
 				}
 				
 				index++;
@@ -47,11 +47,11 @@ public class Writer implements Runnable {
 		}
 	}
 
-	private synchronized void syncRead(int index) {
+	private synchronized void syncWrite(int index) {
 		cb = new CharacterBuffer(cArray[index]);
 	}
 	
-	private void asyncRead(int index) {
+	private void asyncWrite(int index) {
 		cb = new CharacterBuffer(cArray[index]);
 	}
 }
