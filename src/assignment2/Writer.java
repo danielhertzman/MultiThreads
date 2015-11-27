@@ -1,6 +1,9 @@
 package assignment2;
 
-public class Writer implements Runnable {
+import java.util.Observable;
+import java.util.Observer;
+
+public class Writer implements Observer, Runnable {
 	
 	private boolean running;
 	private MainForm mf;
@@ -12,11 +15,11 @@ public class Writer implements Runnable {
 	public Writer(MainForm mf) {
 		this.mf = mf;
 		sync = mf.isSync();
-		txt = mf.getTxt();
-		cArray = new char[txt.length()];
+//		txt = mf.getTxt();
+		cArray = new char[mf.getTxt().length()];
 		System.out.println("synchronized: " + sync);
-		for (int i = 0; i < txt.length(); i++) {
-			cArray[i] = txt.charAt(i);
+		for (int i = 0; i < mf.getTxt().length(); i++) {
+			cArray[i] = mf.getTxt().charAt(i);
 		}
 	}
 	
@@ -35,23 +38,22 @@ public class Writer implements Runnable {
 				Thread.sleep(300);
 				
 				if (sync) {
-					syncWrite(index);
+					synchronized (cArray) {
+						cb = new CharacterBuffer(cArray[index], sync);
+					}
+				} else {
+					cb = new CharacterBuffer(cArray[index], sync);
 				}
-
-				else {
-					asyncWrite(index);
-				}
+				
 				
 				index++;
 			} catch (InterruptedException e) { running = false; }
 		}
 	}
 
-	private synchronized void syncWrite(int index) {
-		cb = new CharacterBuffer(cArray[index]);
-	}
-	
-	private void asyncWrite(int index) {
-		cb = new CharacterBuffer(cArray[index]);
+	@Override
+	public void update(Observable o, Object arg) {
+		// TODO Auto-generated method stub
+		
 	}
 }

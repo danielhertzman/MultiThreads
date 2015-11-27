@@ -4,8 +4,10 @@ public class MainForm {
 	
 	private boolean sync;
 	private String txt;
-	private Thread tSync;
-	private Thread tNotSync;
+	private Thread writeT;
+	private Thread readT;
+	private Thread rNotSync;
+	private Thread wNotSync;
 	
 	public MainForm(String txt, boolean sync) {
 		this.txt = txt;
@@ -15,13 +17,10 @@ public class MainForm {
 	
 	private void initialize() {
 		
-		if (sync) {
-			tSync = new Thread(new Writer(this));
-			tSync.start();
-		} else {
-			tNotSync = new Thread(new Writer(this));
-			tNotSync.start();
-		}
+		readT = new Thread(new Writer(this));
+		writeT = new Thread(new Reader(this));
+		readT.start();
+		writeT.start();
 		
 	}
 

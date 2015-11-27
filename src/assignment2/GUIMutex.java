@@ -142,10 +142,14 @@ public class GUIMutex implements ActionListener
 		
 		if (e.getSource() == btnRun) {
 			
-			new MainForm(txtTrans.getText(), bSync.isSelected());
+			MainForm mf = new MainForm(txtTrans.getText(), bSync.isSelected());
 			
 			if (!bSync.isSelected()) {
 				pnlRes.setBackground(Color.RED);
+			}
+			
+			for (char c : mf.getTxt().toCharArray()) {
+				listW.append(c + "\n");
 			}
 		}
 	}

@@ -1,11 +1,15 @@
 package assignment2;
 
-public class CharacterBuffer {
+import java.util.Observable;
+
+public class CharacterBuffer extends Observable{
 	private Writer r;
 	private Reader w;
 	private char current;
+	private boolean sync;
 	
-	public CharacterBuffer(char current) {
+	public CharacterBuffer(char current, boolean sync) {
+		this.sync = sync;
 		this.current = current;
 		System.out.println(current);
 	}
