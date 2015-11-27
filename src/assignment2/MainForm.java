@@ -6,8 +6,6 @@ public class MainForm {
 	private String txt;
 	private Thread writeT;
 	private Thread readT;
-	private Thread rNotSync;
-	private Thread wNotSync;
 	
 	public MainForm(String txt, boolean sync) {
 		this.txt = txt;
@@ -16,11 +14,11 @@ public class MainForm {
 	}
 	
 	private void initialize() {
-		
-		readT = new Thread(new Writer(this));
-		writeT = new Thread(new Reader(this));
-		readT.start();
+		CharacterBuffer cb = new CharacterBuffer();
+		readT = new Thread(new Writer(this, cb));
+		writeT = new Thread(new Reader(this, cb));
 		writeT.start();
+		readT.start();
 		
 	}
 

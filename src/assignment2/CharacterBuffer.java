@@ -3,19 +3,19 @@ package assignment2;
 import java.util.Observable;
 
 public class CharacterBuffer extends Observable{
-	private Writer r;
-	private Reader w;
-	private char current;
-	private boolean sync;
 	
-	public CharacterBuffer(char current, boolean sync) {
-		this.sync = sync;
-		this.current = current;
-		System.out.println(current);
+	private char c;
+	
+	public void put(char c) {
+		this.c = c;
+		setChanged();
+		notifyObservers();
 	}
 	
-	public char getCurrent() {
-		return current;
+	public char get() {
+		setChanged();
+		notifyObservers();
+		return c;
 	}
 	
 }

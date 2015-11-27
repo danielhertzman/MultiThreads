@@ -6,16 +6,14 @@ import java.util.Observer;
 public class Writer implements Observer, Runnable {
 	
 	private boolean running;
-	private MainForm mf;
 	private boolean sync;
 	private String txt;
 	private char[] cArray;
 	private CharacterBuffer cb;
 	
-	public Writer(MainForm mf) {
-		this.mf = mf;
+	public Writer(MainForm mf, CharacterBuffer cb) {
 		sync = mf.isSync();
-//		txt = mf.getTxt();
+		this.cb = cb;
 		cArray = new char[mf.getTxt().length()];
 		System.out.println("synchronized: " + sync);
 		for (int i = 0; i < mf.getTxt().length(); i++) {
@@ -38,11 +36,12 @@ public class Writer implements Observer, Runnable {
 				Thread.sleep(300);
 				
 				if (sync) {
-					synchronized (cArray) {
-						cb = new CharacterBuffer(cArray[index], sync);
-					}
+					
+					synchronized (cb) {
+						cb.put(cArray[index]);
+					}	
 				} else {
-					cb = new CharacterBuffer(cArray[index], sync);
+					cb.put(cArray[index]);
 				}
 				
 				
@@ -53,7 +52,9 @@ public class Writer implements Observer, Runnable {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		// TODO Auto-generated method stub
+		synchronized(cb) {
+			notifyAll();
+		}
 		
 	}
 }
