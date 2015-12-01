@@ -6,9 +6,9 @@ public class MainForm {
 	private String txt;
 	private Thread writeT;
 	private Thread readT;
-	private Controller controller;
+	private StatusController controller;
 	
-	public MainForm(String txt, boolean sync, Controller controller) {
+	public MainForm(String txt, boolean sync, StatusController controller) {
 		this.controller = controller;
 		this.txt = txt;
 		this.sync = sync;
@@ -21,7 +21,6 @@ public class MainForm {
 		writeT = new Thread(new Reader(this, cb, controller));
 		writeT.start();
 		readT.start();
-		
 	}
 
 	public boolean isSync() {

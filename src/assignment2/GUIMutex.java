@@ -27,7 +27,7 @@ public class GUIMutex implements ActionListener
 	private JLabel lblStatus;		// The status of the transmission
 	private JTextArea listW;		// The write logger pane
 	private JTextArea listR;		// The read logger pane
-	private Controller controller;
+	private StatusController controller;
 	
 	/**
 	 * Constructor
@@ -39,7 +39,7 @@ public class GUIMutex implements ActionListener
 	/**
 	 * Starts the application
 	 */
-	public void start(Controller c)
+	public void start(StatusController c)
 	{
 		frame = new JFrame();
 		frame.setBounds(0, 0, 601, 482);
@@ -133,6 +133,7 @@ public class GUIMutex implements ActionListener
 		pnlTest.add(lblStatus);
 		// The clear input button, starts disabled
 		btnClear = new JButton("Clear");
+		btnClear.addActionListener(this);
 		btnClear.setBounds(26, 303, 75, 23);
 		btnClear.setEnabled(false);
 		pnlTest.add(btnClear);
@@ -145,17 +146,42 @@ public class GUIMutex implements ActionListener
 	public void setWriteList(char c) {
 		listW.append("Writing character: " + c + "\n");
 	}
+	
+	public void setTrans(String txt) {
+		lblTrans.setText(txt);
+	}
+	
+	public void setRec(String txt) {
+		lblRec.setText(txt);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == btnRun) {
 			
-			MainForm mf = new MainForm(txtTrans.getText(), bSync.isSelected(), controller);
+			new MainForm(txtTrans.getText(), bSync.isSelected(), controller);
 			
 			if (!bSync.isSelected()) {
 				pnlRes.setBackground(Color.RED);
+				lblStatus.setText("Asynchronized");
+			} else {
+				pnlRes.setBackground(Color.GREEN);
+				lblStatus.setText("Synchronized");
 			}
+			
+			btnClear.setEnabled(true);
+			btnRun.setEnabled(false);
+		}
+		
+		if (e.getSource() == btnClear) {
+			listW.setText("");
+			listR.setText("");
+			btnRun.setEnabled(true);
+			lblTrans.setText("");
+			lblRec.setText("");
+			controller.setR("");
+			controller.setW("");
 		}
 	}
 	
@@ -164,7 +190,7 @@ public class GUIMutex implements ActionListener
 //***********************************************************************
 	public static void main(String[] args) {
 		GUIMutex gui = new GUIMutex();
-		Controller c = new Controller(gui);
+		StatusController c = new StatusController(gui);
 		gui.start(c);
 	}
 
