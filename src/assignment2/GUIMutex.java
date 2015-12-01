@@ -28,6 +28,7 @@ public class GUIMutex implements ActionListener
 	private JTextArea listW;		// The write logger pane
 	private JTextArea listR;		// The read logger pane
 	private StatusController controller;
+	private MainForm mf;
 	
 	/**
 	 * Constructor
@@ -125,7 +126,7 @@ public class GUIMutex implements ActionListener
 		pnlRes = new JPanel();
 		pnlRes.setBorder(BorderFactory.createLineBorder(Color.black));
 		pnlRes.setBounds(26, 225, 75, 47);
-		pnlRes.setBackground(Color.GREEN);
+		pnlRes.setBackground(null);
 		pnlTest.add(pnlRes);
 		// also to this text
 		lblStatus = new JLabel("Staus goes here");
@@ -139,18 +140,38 @@ public class GUIMutex implements ActionListener
 		pnlTest.add(btnClear);
 	}
 	
+	/**
+	 * Inserts a character into the 
+	 * read list
+	 * @param c
+	 */
 	public void setReadList(char c) {
 		listR.append("Reading character: " + c + "\n");
 	}
 	
+	/**
+	 * Inserts a character into the
+	 * write list
+	 * @param c
+	 */
 	public void setWriteList(char c) {
 		listW.append("Writing character: " + c + "\n");
 	}
 	
+	/**
+	 * Sets the label containing the
+	 * transmitted text
+	 * @param txt
+	 */
 	public void setTrans(String txt) {
 		lblTrans.setText(txt);
 	}
 	
+	/**
+	 * Sets the label containing the
+	 * received text
+	 * @param txt
+	 */
 	public void setRec(String txt) {
 		lblRec.setText(txt);
 	}
@@ -160,7 +181,7 @@ public class GUIMutex implements ActionListener
 		
 		if (e.getSource() == btnRun) {
 			
-			new MainForm(txtTrans.getText(), bSync.isSelected(), controller);
+			mf = new MainForm(txtTrans.getText(), bSync.isSelected(), controller);
 			
 			if (!bSync.isSelected()) {
 				pnlRes.setBackground(Color.RED);
@@ -182,6 +203,8 @@ public class GUIMutex implements ActionListener
 			lblRec.setText("");
 			controller.setR("");
 			controller.setW("");
+			pnlRes.setBackground(null);
+			mf.terminate();
 		}
 	}
 	
