@@ -6,8 +6,10 @@ public class MainForm {
 	private String txt;
 	private Thread writeT;
 	private Thread readT;
+	private Controller controller;
 	
-	public MainForm(String txt, boolean sync) {
+	public MainForm(String txt, boolean sync, Controller controller) {
+		this.controller = controller;
 		this.txt = txt;
 		this.sync = sync;
 		initialize();
@@ -15,8 +17,8 @@ public class MainForm {
 	
 	private void initialize() {
 		CharacterBuffer cb = new CharacterBuffer();
-		readT = new Thread(new Writer(this, cb));
-		writeT = new Thread(new Reader(this, cb));
+		readT = new Thread(new Writer(this, cb, controller));
+		writeT = new Thread(new Reader(this, cb, controller));
 		writeT.start();
 		readT.start();
 		

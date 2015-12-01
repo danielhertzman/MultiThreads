@@ -8,10 +8,13 @@ public class Reader implements Observer, Runnable {
 	private boolean sync;
 	private char c;
 	private CharacterBuffer cb;
+	private Controller controller;
 	
-	public Reader(MainForm mf, CharacterBuffer cb) {
+	public Reader(MainForm mf, CharacterBuffer cb, Controller c) {
+		this.controller = c;
 		sync = mf.isSync();
 		this.cb = cb;
+		cb.addObserver(this);
 	}
 	
 
@@ -27,15 +30,17 @@ public class Reader implements Observer, Runnable {
 				
 				if (sync) {
 					
-					synchronized (cb) {
-						c = cb.get();
+					synchronized (this) {
+						c = cb.syncGet();
+						controller.setRLog(c);
+						this.wait();
 					}
 					
 				} else {
 					c = cb.get();
+					controller.setRLog(c);
 				}
 				
-				System.out.println(c);
 			} catch (InterruptedException e) { running = false; }
 		}
 		
@@ -48,8 +53,10 @@ public class Reader implements Observer, Runnable {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		synchronized(cb) {
+
+		synchronized (this) {
 			notifyAll();
+
 		}
 	}
 

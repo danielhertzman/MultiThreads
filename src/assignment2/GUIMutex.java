@@ -27,6 +27,7 @@ public class GUIMutex implements ActionListener
 	private JLabel lblStatus;		// The status of the transmission
 	private JTextArea listW;		// The write logger pane
 	private JTextArea listR;		// The read logger pane
+	private Controller controller;
 	
 	/**
 	 * Constructor
@@ -38,7 +39,7 @@ public class GUIMutex implements ActionListener
 	/**
 	 * Starts the application
 	 */
-	public void start()
+	public void start(Controller c)
 	{
 		frame = new JFrame();
 		frame.setBounds(0, 0, 601, 482);
@@ -49,6 +50,7 @@ public class GUIMutex implements ActionListener
 		frame.setVisible(true);
 		frame.setResizable(false);			// Prevent user from change size
 		frame.setLocationRelativeTo(null);	// Start middle screen
+		this.controller = c;
 	}
 	
 	/**
@@ -136,20 +138,23 @@ public class GUIMutex implements ActionListener
 		pnlTest.add(btnClear);
 	}
 	
+	public void setReadList(char c) {
+		listR.append("Reading character: " + c + "\n");
+	}
+	
+	public void setWriteList(char c) {
+		listW.append("Writing character: " + c + "\n");
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		if (e.getSource() == btnRun) {
 			
-			MainForm mf = new MainForm(txtTrans.getText(), bSync.isSelected());
+			MainForm mf = new MainForm(txtTrans.getText(), bSync.isSelected(), controller);
 			
 			if (!bSync.isSelected()) {
 				pnlRes.setBackground(Color.RED);
-			}
-			
-			for (char c : mf.getTxt().toCharArray()) {
-				listW.append(c + "\n");
 			}
 		}
 	}
@@ -158,7 +163,9 @@ public class GUIMutex implements ActionListener
 	
 //***********************************************************************
 	public static void main(String[] args) {
-		new GUIMutex().start();
+		GUIMutex gui = new GUIMutex();
+		Controller c = new Controller(gui);
+		gui.start(c);
 	}
 
 }

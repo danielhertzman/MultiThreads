@@ -10,14 +10,18 @@ public class Writer implements Observer, Runnable {
 	private String txt;
 	private char[] cArray;
 	private CharacterBuffer cb;
+	private Controller controller;
 	
-	public Writer(MainForm mf, CharacterBuffer cb) {
+	public Writer(MainForm mf, CharacterBuffer cb, Controller c) {
+		this.controller = c;
 		sync = mf.isSync();
 		this.cb = cb;
+		txt = mf.getTxt();
+		cb.addObserver(this);
 		cArray = new char[mf.getTxt().length()];
-		System.out.println("synchronized: " + sync);
+		
 		for (int i = 0; i < mf.getTxt().length(); i++) {
-			cArray[i] = mf.getTxt().charAt(i);
+			cArray[i] = txt.charAt(i);
 		}
 	}
 	
@@ -25,6 +29,9 @@ public class Writer implements Observer, Runnable {
 		return txt;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public void run() {
 		running = true;
@@ -34,25 +41,29 @@ public class Writer implements Observer, Runnable {
 
 			try {
 				Thread.sleep(300);
+				controller.setWLog(cArray[index]);
 				
 				if (sync) {
 					
-					synchronized (cb) {
-						cb.put(cArray[index]);
+					synchronized (this) {
+						cb.syncPut(cArray[index]);
+						this.wait();
 					}	
+					
 				} else {
 					cb.put(cArray[index]);
 				}
 				
-				
 				index++;
+				
 			} catch (InterruptedException e) { running = false; }
 		}
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		synchronized(cb) {
+		
+		synchronized(this) {
 			notifyAll();
 		}
 		
