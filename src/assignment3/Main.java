@@ -7,5 +7,5 @@ public class Main
 			GUISemaphore test = new GUISemaphore();
 			test.start();
 	}
-
+	
 }

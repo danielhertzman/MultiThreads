@@ -8,7 +8,12 @@ public class Factory {
 	private LinkedList<FoodItem> foodList;
 	
 	public Factory() {
-		// TODO Auto-generated constructor stub
+		foodList = new LinkedList<FoodItem>();
+		initFoodItems();
+	}
+	
+	public void addIntoList(FoodItem item) {
+		foodList.add(item);
 	}
 
 	public Storage getStorage() {
@@ -19,6 +24,11 @@ public class Factory {
 		return foodList;
 	}
 	
+	private void initFoodItems() {
+		
+		FoodItem[] fi = new FoodItem[10];
+		fi[0] = new FoodItem("Milk", 1, 1);
+		
+	}
 	
-
 }
