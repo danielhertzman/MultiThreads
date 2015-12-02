@@ -1,13 +1,15 @@
 package assignment3;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
 /**
  * The GUI for assignment 3
  */
-public class GUISemaphore 
+public class GUISemaphore implements ActionListener
 {
 	/**
 	 * These are the components you need to handle.
@@ -126,6 +128,7 @@ public class GUISemaphore
 		btnDeliver = new JButton("Start Deliver");
 		btnDeliver.setBounds(17, 239, 109, 23);
 		pnlICA.add(btnDeliver);
+		btnDeliver.addActionListener(this);
 		lblDeliver = new JLabel("Truck Delivering");
 		lblDeliver.setFont(new Font("Dejavu Sans", Font.BOLD, 20));
 		lblDeliver.setForeground(Color.RED);
@@ -145,7 +148,9 @@ public class GUISemaphore
 		btnStartB = new JButton("Start Working");
 		btnStartB.setBounds(31, 114, 116, 23);
 		pnlFoodb.add(btnStartB);
+		btnStartB.addActionListener(this);
 		btnStopB = new JButton("Stop");
+		btnStopB.addActionListener(this);
 		btnStopB.setBounds(156, 114, 60, 23);
 		pnlFoodb.add(btnStopB);
 
@@ -161,9 +166,37 @@ public class GUISemaphore
 		pnlFooda.add(lblAStatus);
 		btnStartA = new JButton("Start Working");
 		btnStartA.setBounds(31, 114, 116, 23);
+		btnStartA.addActionListener(this);
 		pnlFooda.add(btnStartA);
 		btnStopA = new JButton("Stop");
+		btnStopA.addActionListener(this);
 		btnStopA.setBounds(156, 114, 60, 23);
 		pnlFooda.add(btnStopA);
+	}
+
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		if (e.getSource() == btnDeliver) {
+			System.out.println("starting deliver");
+		}
+		
+		if (e.getSource() == btnStartA) {
+			System.out.println("starting A");
+		}
+		
+		if (e.getSource() == btnStartB) {
+			System.out.println("starting B");
+		}
+		
+		if (e.getSource() == btnStopA) {
+			System.out.println("stopping A");
+		}
+		
+		if (e.getSource() == btnStopB) {
+			System.out.println("stopping B");
+		}
+		
 	}
 }
