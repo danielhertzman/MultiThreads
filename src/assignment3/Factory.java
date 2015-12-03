@@ -1,11 +1,13 @@
 package assignment3;
 
 import java.util.LinkedList;
+import java.util.concurrent.Semaphore;
 
 public class Factory {
 	
 	private Storage storage;
 	private LinkedList<FoodItem> foodList;
+	private Semaphore s;
 	
 	public Factory() {
 		foodList = new LinkedList<FoodItem>();

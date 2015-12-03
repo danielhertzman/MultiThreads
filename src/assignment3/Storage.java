@@ -20,7 +20,7 @@ public class Storage {
 		q.add(item);
 	}
 	
-	public void removeFromStorage() {
-		q.remove();
+	public FoodItem removeFromStorage() {
+		return q.remove();
 	}
 }
