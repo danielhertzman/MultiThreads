@@ -1,26 +1,24 @@
 package assignment3;
 
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.concurrent.Semaphore;
 
 public class Storage {
 	
-	private Queue<FoodItem> q = new LinkedList<FoodItem>();
-	/*
-	 * Do something with this thingy
-	 */
+	private LinkedList<FoodItem> list = new LinkedList<FoodItem>();
 	private Semaphore s;
 	
-	public Storage(Semaphore s) {
+	public Storage(LinkedList<FoodItem> list, Semaphore s) {
+		this.list = list;
 		this.s = s;
+		
 	}
 	
 	public void addToStorage(FoodItem item) {
-		q.add(item);
+		list.add(item);
 	}
 	
 	public FoodItem removeFromStorage() {
-		return q.remove();
+		return list.remove();
 	}
 }

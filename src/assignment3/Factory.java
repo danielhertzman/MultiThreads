@@ -11,26 +11,18 @@ public class Factory {
 	
 	public Factory() {
 		foodList = new LinkedList<FoodItem>();
+		s = new Semaphore(2);
+		storage = new Storage(foodList, s);
 		initFoodItems();
-	}
-	
-	public void addIntoList(FoodItem item) {
-		foodList.add(item);
 	}
 
 	public Storage getStorage() {
 		return storage;
 	}
-
-	public LinkedList<FoodItem> getFoodList() {
-		return foodList;
-	}
 	
 	private void initFoodItems() {
-		
 		FoodItem[] fi = new FoodItem[10];
 		fi[0] = new FoodItem("Milk", 1, 1);
-		
+		fi[1] = new FoodItem("Eggs", 2, 2);
 	}
-	
 }

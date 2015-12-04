@@ -183,10 +183,12 @@ public class GUISemaphore implements ActionListener
 		}
 		
 		if (e.getSource() == btnStartA) {
+			Factory a = new Factory();
 			System.out.println("starting A");
 		}
 		
 		if (e.getSource() == btnStartB) {
+			Factory b = new Factory();
 			System.out.println("starting B");
 		}
 		
