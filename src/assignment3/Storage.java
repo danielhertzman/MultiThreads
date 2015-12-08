@@ -11,7 +11,6 @@ public class Storage {
 	public Storage(LinkedList<FoodItem> list, Semaphore s) {
 		this.list = list;
 		this.s = s;
-		
 	}
 	
 	public void addToStorage(FoodItem item) {
