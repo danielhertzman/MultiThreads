@@ -13,7 +13,7 @@ public class Factory implements Runnable {
 		foodList = new LinkedList<FoodItem>();
 		s = new Semaphore(2);
 		storage = new Storage(foodList, s);
-		makeFood();
+		produce();
 	}
 
 	public Storage getStorage() {
@@ -22,10 +22,10 @@ public class Factory implements Runnable {
 	
 	@Override
 	public void run() {
-		
+		new Thread(new Truck(storage)).start();
 	}
 	
-	private FoodItem[] makeFood() {
+	private void produce() {
 		FoodItem[] fi = new FoodItem[10];
 		fi[0] = new FoodItem("Milk", 1, 1);
 		fi[1] = new FoodItem("Eggs", 2, 2);
@@ -37,7 +37,10 @@ public class Factory implements Runnable {
 		fi[7] = new FoodItem("Beans", 8, 8);
 		fi[8] = new FoodItem("Banana", 9, 9);
 		fi[9] = new FoodItem("Swag", 10, 10);
-		fi[10] = new FoodItem("Apple", 11, 11);
-		return fi;
+//		fi[10] = new FoodItem("Apple", 11, 11);
+		
+		for (FoodItem item : fi) {
+			storage.addToStorage(item);
+		}
 	}
 }

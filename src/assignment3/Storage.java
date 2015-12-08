@@ -18,6 +18,6 @@ public class Storage {
 	}
 	
 	public FoodItem removeFromStorage() {
-		return list.remove();
+		return list.removeFirst();
 	}
 }
