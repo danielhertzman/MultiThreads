@@ -6,9 +6,9 @@ import java.util.Queue;
 public class Truck implements Runnable {
 	
 	private Storage s;
-	private Queue<FoodItem> q = new LinkedList<FoodItem>();
+	private LinkedList<FoodItem> q = new LinkedList<FoodItem>();
 	private boolean full = false;
-	private int currentLoad = 0;
+	private int currentIndex = 0;
 	private static final int CAPACITY = 10;
 	
 	public Truck(Storage s) {
@@ -21,23 +21,30 @@ public class Truck implements Runnable {
 		boolean running = true;
 		
 		try {
-			Thread.sleep(200);
-			while (running) {
-				fill(s.removeFromStorage());
+			while (running && !s.isEmpty() && !full) {
+				Thread.sleep(200);
+				load(s.removeFromStorage());
 			}
 		} catch(InterruptedException e) { running = false; }
 	} 
 	
-	private void fill(FoodItem item) {
-		while (!q.isEmpty() && !full) {
-			q.add(item);
-			currentLoad++;
-			if (currentLoad == CAPACITY) full = true; System.out.println("now full");
+	private void load(FoodItem item) {
+		q.add(item);
+		System.out.println(q.get(currentIndex).getName());
+		currentIndex++;
+
+		if (currentIndex == CAPACITY) {
+			full = true;
+			System.out.println("now full");
 		}
 	}
 	
-	public int getCurrentLoad() {
-		return currentLoad;
+	public FoodItem unLoad() {
+		return q.removeFirst(); // temporary
+	}
+	
+	public int getNumberOfElements() {
+		return currentIndex;
 	}
 	
 	public boolean isFull() {

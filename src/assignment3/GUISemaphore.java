@@ -30,12 +30,16 @@ public class GUISemaphore implements ActionListener
 	private JButton btnStartA;			// Button start factory A
 	private JButton btnStopB;			// Button stop factory B
 	private JButton btnStopA;			// Button stop factory A
+	private Factory a;
+	private Factory b;
 
 	/**
 	 * Constructor, creates the window
 	 */
-	public GUISemaphore()
+	public GUISemaphore(Factory a, Factory b)
 	{
+		this.a = a;
+		this.b = b;
 		frame = new JFrame();
 		frame.setBounds(0, 0, 652, 459);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -178,18 +182,17 @@ public class GUISemaphore implements ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
+		
 		if (e.getSource() == btnDeliver) {
 			System.out.println("starting deliver");
 		}
 		
 		if (e.getSource() == btnStartA) {
-			Factory a = new Factory();
 			System.out.println("starting A");
 			new Thread(a).start();
 		}
 		
 		if (e.getSource() == btnStartB) {
-			Factory b = new Factory();
 			System.out.println("starting B");
 		}
 		
