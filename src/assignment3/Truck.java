@@ -1,53 +1,117 @@
 package assignment3;
 
-import java.util.LinkedList;
-import java.util.Queue;
-
+/**
+ * The consumer in a prod/cons model
+ * @author Daniel Hertzman-Ericson
+ *
+ */
 public class Truck implements Runnable {
-	
-	private Storage s;
-	private LinkedList<FoodItem> q = new LinkedList<FoodItem>();
-	private boolean full = false;
-	private int currentIndex = 0;
-	private static final int CAPACITY = 10;
-	
-	public Truck(Storage s) {
-		this.s = s;
-	}
-	
-	@Override
-	public void run() {
-		
-		boolean running = true;
-		
-		try {
-			while (running && !s.isEmpty() && !full) {
-				Thread.sleep(200);
-				load(s.removeFromStorage());
-			}
-		} catch(InterruptedException e) { running = false; }
-	} 
-	
-	private void load(FoodItem item) {
-		q.add(item);
-		System.out.println(q.get(currentIndex).getName());
-		currentIndex++;
 
-		if (currentIndex == CAPACITY) {
-			full = true;
-			System.out.println("now full");
+	private final Storage storage;
+	private final Controller controller;
+	private double maxVolume;
+	private double maxWeight;
+	private int nbr = 0;
+
+	public Truck(Storage storage, Controller controller) {
+		this.storage = storage;
+		this.controller = controller;
+	}
+
+	/*
+	 * This method is the logic for the Truck
+	 */
+	public void run() {
+		while (!Thread.interrupted()) {
+			try {
+				Thread.sleep(300);
+				if (storage.isEmpty()) {
+					doing(2);
+				} else if (!storage.isEmpty()) {
+
+					checkMax();
+				}
+			} catch (InterruptedException e) {
+				break;
+			}
 		}
 	}
-	
-	public FoodItem unLoad() {
-		return q.removeFirst(); // temporary
+
+	/*
+	 * Runs until the truck is fully loaded.
+	 */
+	private void checkMax() throws InterruptedException {
+		if (maxVolume < 30 || maxWeight < 30 || nbr < 20) {
+
+			if (storage.getGo()) {
+				doing(1);
+			} else if (!storage.getGo()) {
+				doing(2);
+			}
+
+			nbr++;
+			setWeight();
+			setVolume();
+			setProductName();
+			setNbrOfItems();
+			storage.remove();
+		}
+		if (maxVolume >= 30 || maxWeight >= 30 || nbr >= 20) {
+			pickUp();
+		}
 	}
-	
-	public int getNumberOfElements() {
-		return currentIndex;
+
+	/*
+	 * When the truck is loaded this method resets the trucks value and make the
+	 * Thread sleep for 5sec.
+	 */
+	private void pickUp() throws InterruptedException {
+		maxVolume = 0;
+		maxWeight = 0;
+		nbr = 0;
+		doing(3);
+		controller.truckDone();
+
+		Thread.sleep(5000);
+
 	}
-	
-	public boolean isFull() {
-		return full;
+
+	/*
+	 * Count the weight.
+	 */
+	private void setWeight() {
+		maxWeight += storage.element().getWeight();
+		controller.setWeight(maxWeight);
 	}
+
+	/*
+	 * Count the volume.
+	 */
+	private void setVolume() {
+		maxVolume += storage.element().getVolume();
+		controller.setVolume(maxVolume);
+	}
+
+	/*
+	 * Sends the name of the item to the controller class.
+	 */
+	private void setProductName() {
+		controller.setName(storage.element().getName());
+
+	}
+
+	/*
+	 * Count the items.
+	 */
+	private void setNbrOfItems() {
+		controller.setNbrOfItems(nbr);
+	}
+
+	/*
+	 * Call the method work that have a some switch statements in it.
+	 */
+	private void doing(int work) {
+		controller.work(work);
+	}
+
 }

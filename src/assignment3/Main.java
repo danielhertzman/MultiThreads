@@ -4,9 +4,9 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		Factory a = new Factory();
-		Factory b = new Factory();
-		GUISemaphore test = new GUISemaphore(a,b);
+		GUISemaphore gui = new GUISemaphore ( );
+        Controller controller = new Controller (gui);
+        gui.start(controller);
 	}
 	
 }
