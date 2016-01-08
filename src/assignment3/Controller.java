@@ -1,5 +1,10 @@
 package assignment3;
 
+/**
+ * Controller class for the program
+ * @author Daniel Hertzman-Ericson
+ *
+ */
 public class Controller {
 	
 	private final GUISemaphore gui;
@@ -161,14 +166,14 @@ public class Controller {
 	/*
 	 * Changes the working and resting label for factory 1
 	 */
-	public boolean isT1() {
+	public boolean isT1Running() {
 		return t1Running;
 	}
 
 	/*
 	 * Changes the working and resting label for factory 1
 	 */
-	public boolean isT2() {
+	public boolean isT2Running() {
 		return t2Running;
 	}
 }

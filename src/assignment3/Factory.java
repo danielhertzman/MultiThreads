@@ -35,19 +35,19 @@ public class Factory implements Runnable {
 				int i = rand.nextInt(18);
 				storage.add(foodItem[i]);
 
-				if (controller.isT1()) {
+				if (controller.isT1Running()) {
 					controller.factoryResting(2);
 				}
-				if (controller.isT2()) {
+				if (controller.isT2Running()) {
 					controller.factoryResting(4);
 
 				}
 				if (storage.getNbrOfItems() >= 40) {
 
-					if (controller.isT1()) {
+					if (controller.isT1Running()) {
 						controller.factoryResting(1);
 					}
-					if (controller.isT2()) {
+					if (controller.isT2Running()) {
 						controller.factoryResting(3);
 					}
 				}
