@@ -18,19 +18,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ClientUI extends JPanel {
+public class ClientUI extends JPanel implements ActionListener {
 	
 	private JTextField insert = new JTextField();
 	private JTextPane textPane = new JTextPane();
 	private JButton send = new JButton("Send");
+	private JButton connect = new JButton("Connect");
 	private JPanel subPnl = new JPanel();
 	private StyledDocument doc = new DefaultStyledDocument();
 
 	
 	public ClientUI() {
+		
 		setPreferredSize(new Dimension(400,400));
 		setLayout(new BorderLayout());
-		subPnl.setLayout(new GridLayout(1, 2));
+		subPnl.setLayout(new GridLayout(1, 3));
 		
 		textPane.setEditable(false);
 		textPane.setDocument(doc);
@@ -38,30 +40,41 @@ public class ClientUI extends JPanel {
 		
 		subPnl.add(insert);
 		subPnl.add(send);
+		subPnl.add(connect);
 		
 		add(textPane, BorderLayout.CENTER);
 		add(subPnl, BorderLayout.SOUTH);
 		
-		send.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					
-					doc.insertString(doc.getLength(), insert.getText()+"\n", null);
-					
-				} catch (BadLocationException e1) {}
-			}
-		});
+		send.setEnabled(false);
+		send.addActionListener(this);
+		connect.addActionListener(this);
+		
+	}
+	public void append(String message, String username) {
+		try {
+			doc.insertString(doc.getLength(), username + " wrote: " +message+"\n", null);
+		} catch (BadLocationException e) {}
 	}
 	
-	public static void main(String[] args) {
-		JFrame frame = new JFrame("Awesome chat");
-		frame.add(new ClientUI());
-		frame.setVisible(true);
-		frame.pack();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	public String getMessage() {
+		return insert.getText();
 	}
-	
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == send) {
+			try {
+				doc.insertString(doc.getLength(), "You wrote : " + insert.getText()+"\n", null);
+			} catch (BadLocationException e1) {}
+		}
+		
+		if (e.getSource() == connect) {
+			Client client = new Client(this, "Blubb");
+			Thread t = new Thread(client);
+			t.start();
+			send.setEnabled(true);
+		}
+		
+	}
+	
 }
