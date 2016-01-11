@@ -11,7 +11,6 @@ public class Client implements Runnable {
 	private ObjectOutputStream oos;
 	private ObjectInputStream ois;
 	private boolean running;
-	private boolean ok;
 	
 	public Client(ClientUI ui, String userName) {
 		this.ui = ui;
@@ -24,24 +23,22 @@ public class Client implements Runnable {
 		try {
 			
 			while (running) {
-				ok = ui.getMessage() != null;
-				if (ok) {
-					socket = new Socket("localhost", 3000);
-					oos = new ObjectOutputStream(socket.getOutputStream());
-					ois = new ObjectInputStream(socket.getInputStream());
-				}
-				try {
-					if (ois.readObject() != null) {
-						Controller c = new Controller();
-						new Thread(c).start();
-						ui.append(c.getMessage(), userName);
-					}
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				socket = new Socket("localhost", 3000);
+				oos = new ObjectOutputStream(socket.getOutputStream());
+				ois = new ObjectInputStream(socket.getInputStream());
+				System.out.println("Client connected");
+				if (ui.ok()) {
+					try {
+						if (ois.readObject() != null) {
+							Controller c = new Controller();
+							new Thread(c).start();
+							System.out.println(ois.readObject());
+							ui.append(c.getMessage(), userName);
+						}
+					} catch (ClassNotFoundException e) {}
 				}
 			}
-		} catch (IOException e) {}
+		} catch (IOException e) {} 
 	}
 	
 	private class Controller implements Runnable {

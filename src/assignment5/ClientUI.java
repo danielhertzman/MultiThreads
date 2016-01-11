@@ -1,19 +1,10 @@
 package assignment5;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Element;
-import javax.swing.text.Position;
-import javax.swing.text.Segment;
-import javax.swing.text.Style;
 import javax.swing.text.StyledDocument;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,6 +17,7 @@ public class ClientUI extends JPanel implements ActionListener {
 	private JButton connect = new JButton("Connect");
 	private JPanel subPnl = new JPanel();
 	private StyledDocument doc = new DefaultStyledDocument();
+	private boolean ok;
 
 	
 	public ClientUI() {
@@ -73,8 +65,14 @@ public class ClientUI extends JPanel implements ActionListener {
 			Thread t = new Thread(client);
 			t.start();
 			send.setEnabled(true);
+			connect.setEnabled(false);
+			ok = true;
 		}
 		
+	}
+	
+	public boolean ok() {
+		return ok;
 	}
 	
 }

@@ -29,16 +29,20 @@ public class Server implements Runnable {
 				socket = ss.accept();
 				ois = new ObjectInputStream(socket.getInputStream());
 				oos = new ObjectOutputStream(socket.getOutputStream());
-				System.out.println(ois.readObject());
+//				System.out.println(ois.readObject());
 			}
-		} catch (Exception e) { running = false; System.out.println("fel");}
+			
+		} catch (IOException e) { 
+			running = false; 
+			System.out.println("fel");
+		}
 		
 		try {
 			ss.close();
 			ois.close();
 			oos.close();
 			System.out.println("server closed");
-		} catch (Exception e) {}
+		} catch (IOException e) {}
 		
 	}
 	
