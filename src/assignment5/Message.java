@@ -2,35 +2,58 @@ package assignment5;
 
 import java.io.Serializable;
 
+import javax.swing.ImageIcon;
+
 /**
- * Message class that represent a message that can be sent
+ * General message class
  * @author Daniel Hertzman-Ericson
  *
  */
 public class Message implements Serializable {
-	
 	static final int USER = 0, MESSAGE = 1, LOGOUT = 2, OFFLINE = 3;
 	private int type;
-	private String content;
-	private String[] recipent;
+	private String message;
+	private ImageIcon image = null; // Ska implementeras i denna klass!
+	private String[] recipient;
 	private String sender;
 	
-	public Message(int type, String content, String[] recipent, String sender) {
+	Message(int type, String message, String[] recipient, String sender) {
 		this.type = type;
-		this.content = content;
-		this.recipent = recipent;
+		this.message = message;
+		this.image = image;
+		this.recipient = recipient;
 		this.sender = sender;
 	}
 	
-	public int getType() {
+	/**
+	 * Get message type
+	 * @return type
+	 */
+	int getType() {
 		return type;
 	}
 	
-	public String getContent() {
-		return content;
+	/**
+	 * Get message
+	 * @return message
+	 */
+	String getMessage() {
+		return message;
 	}
 	
-	public String getSender() {
+	/**
+	 * Get recipents
+	 * @return recipient
+	 */
+	String[] getRecipient(){
+		return recipient;
+	}
+	
+	/**
+	 * Get sender
+	 * @return sender
+	 */
+	String getSender(){
 		return sender;
 	}
 

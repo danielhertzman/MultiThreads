@@ -1,75 +1,170 @@
 package assignment5;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
-public class Client implements Runnable {
-	
-	private String userName;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+
+/**
+ *Client side class
+ * 
+ * @author Daniel Hertzman-Ericson
+ *
+ */
+public class Client {
+	private String username;
+	private int port;
+	private ObjectInputStream inputStream;
+	private ObjectOutputStream outputStream;
 	private Socket socket;
-	private ClientUI ui;
-	private ObjectOutputStream oos;
-	private ObjectInputStream ois;
-	private boolean running;
-	
-	public Client(ClientUI ui, String userName) {
-		this.ui = ui;
-		this.userName = userName;
+	private ClientUI client;
+
+	/**
+	 * Konstruktor tar emot användarnamn från UI samt vilket UI som gäller
+	 * @param username
+	 * @param client
+	 */
+	public Client(int port, String username, ClientUI client) {
+		this.username = username;
+		this.client = client;
+		this.port = port;
 	}
 
-	@Override
-	public void run() {
-		running = true;
+	/**
+	 * Connects to server and creats I/O
+	 * 
+	 * @return
+	 */
+	public boolean start() {
+
 		try {
-			
-			while (running) {
-				socket = new Socket("localhost", 3000);
-				oos = new ObjectOutputStream(socket.getOutputStream());
-				ois = new ObjectInputStream(socket.getInputStream());
-				System.out.println("Client connected");
-				if (ui.ok()) {
-					try {
-						if (ois.readObject() != null) {
-							Controller c = new Controller();
-							new Thread(c).start();
-							System.out.println(ois.readObject());
-							ui.append(c.getMessage(), userName);
-						}
-					} catch (ClassNotFoundException e) {}
-				}
-			}
-		} catch (IOException e) {} 
-	}
-	
-	private class Controller implements Runnable {
-		
-		private String recievedMsg;
+			socket = new Socket("127.0.0.1", port);			
+			inputStream = new ObjectInputStream(socket.getInputStream());
+			outputStream = new ObjectOutputStream(socket.getOutputStream());
+		} catch (IOException eIO) {}
 
-		@Override
+		new ServerListener().start(); // Startar tråd för att lyssna på meddelande
+
+		try {
+			outputStream.writeObject(username);
+		} catch (IOException eIO) {
+		}
+
+		return true;
+	}
+
+	/**
+	 * Send messages
+	 * @param msg
+	 */
+	void sendMessage(Message msg) {
+		try {
+			outputStream.writeObject(msg);
+			outputStream.flush();
+		} catch (IOException e) {
+		}
+	}
+
+	/**
+	 * Thread that waits for messages
+	 * 
+	 * @author Daniel Hertzman-Ericson
+	 */
+	class ServerListener extends Thread {
+		ArrayList<String> arr;
+		Set<String> set = new HashSet<String>();
+		ArrayList<Message> offMsg = new ArrayList<Message>(); // För offlinebruk
+		ImageIcon image = null;
+		Random rand = new Random();
+		private SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+
 		public void run() {
 
-			send();
-			read();
+			while (true) {
+				try {
 
-		}
-		
-		public void send() {
-			try {
-				oos.writeObject(ui.getMessage());
-				oos.writeObject(userName);
-				oos.flush();
-			} catch (IOException e) {}
-		}
-		
-		public void read() {
-			try {
-				recievedMsg = (String) ois.readObject();
+					Message msg = (Message) inputStream.readObject();
+
+					if (client == null) {
+						System.out.println(msg);
+						System.out.print("> ");
+					} else {
+
+						if (msg.getMessage() != null) {
+
+							String message = null;
+							ImageIcon img = null;
+
+
+							if (msg.getMessage() != null) {
+								message = msg.getMessage();
+							}
+
+							if (message.contains("USERNAME100")) {
+								// Splits away USERNAME100
+								message = message.split("USERNAME100")[0];
+								// adds to set
+								set.add(message);
+								arr = new ArrayList<String>(set);
+								client.updateUsers(arr);
 				
-			} catch (ClassNotFoundException | IOException e) {}
-		}
-		
-		public String getMessage() {
-			return recievedMsg;
+
+							} else if (message.contains("updateTheUser")) {
+								String split = message.split("updateTheUser")[0];
+								set.remove(split);
+								arr = new ArrayList<String>(set);
+								client.updateUsers(arr);
+							} else {
+								
+								
+								
+								for(String str : msg.getRecipient()){
+									if(str.equals("")){
+										String time = df.format(new Date());
+										String messageLf = time + " " + message
+												+ "\n";
+										client.append(messageLf, img);
+										img = null;
+									}
+									
+									if (arr.contains(str)) {
+										String time = df.format(new Date());
+										String messageLf = time + " " + message
+												+ "\n";
+										client.privateAppend(messageLf, img,
+												str, msg.getSender());
+									}
+									
+									if(!arr.contains(str) && !str.equals("")){
+										String[] rec = msg.getRecipient();
+										String mess = msg.getMessage();
+										String sender = msg.getSender();
+										sendMessage(new Message(Message.OFFLINE, mess, rec, sender));
+									}
+									
+								}
+								
+							}
+						}
+
+					}
+				} catch (IOException e) {
+				}
+
+				catch (ClassNotFoundException e2) {
+					System.out.println("Något gick fel!");
+				}
+			}
 		}
 	}
+
 }

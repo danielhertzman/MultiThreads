@@ -3,21 +3,22 @@ package assignment5;
 import javax.swing.JFrame;
 
 /**
- * Executes the server UI
+ * Starts a client window
  * @author Daniel Hertzman-Ericson
  *
  */
-public class StartServer {
-	
+public class StartClient {
+
 	public static void main(String[] args) {
 		
-		ServerUI start = new ServerUI(3540);
+		ClientUI start = new ClientUI();
 		
-		JFrame view = new JFrame("AweSome Chat 1.0");
+		JFrame view = new JFrame("Chat");
 		view.add(start);
 		view.setResizable(false);
 		view.pack();
 		view.setVisible(true);
+		
 	}
-	
+
 }
