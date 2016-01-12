@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 
 /**
@@ -46,9 +48,10 @@ public class Server {
 				if (!keepOn)
 					break;
 				
-				ClientHandle t = new ClientHandle(socket);
-				clientList.add(t);
-				t.start();
+				ExecutorService service = Executors.newFixedThreadPool(1);
+				ClientHandle ch = new ClientHandle(socket);
+				clientList.add(ch);
+				service.execute(ch);
 			}
 
 			try {
@@ -111,7 +114,7 @@ public class Server {
 	 * @author Daniel Hertzman-Ericson
 	 *
 	 */
-	class ClientHandle extends Thread {
+	class ClientHandle implements Runnable {
 		Socket socket;
 		ObjectInputStream inputStream;
 		ObjectOutputStream outputStream;

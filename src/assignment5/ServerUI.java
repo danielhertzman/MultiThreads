@@ -15,7 +15,6 @@ import javax.swing.JPanel;
 public class ServerUI extends JPanel implements ActionListener {
 	private JButton btn = new JButton("Starta servern!");
 	private Server server;
-	private int port;
 
 	/**
 	 * Constructor from port
@@ -23,7 +22,6 @@ public class ServerUI extends JPanel implements ActionListener {
 	 */
 	public ServerUI(int port) {
 		
-		this.port = port;
 		server = new Server(port, this);
 		
 		setPreferredSize(new Dimension(320,160));

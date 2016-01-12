@@ -10,6 +10,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *Client side class
@@ -48,8 +50,9 @@ public class Client {
 			inputStream = new ObjectInputStream(socket.getInputStream());
 			outputStream = new ObjectOutputStream(socket.getOutputStream());
 		} catch (IOException eIO) {}
-
-		new ServerListener().start();
+		
+		ExecutorService service = Executors.newFixedThreadPool(1);
+		service.execute(new ServerListener());
 
 		try {
 			outputStream.writeObject(username);
@@ -74,7 +77,7 @@ public class Client {
 	 * 
 	 * @author Daniel Hertzman-Ericson
 	 */
-	class ServerListener extends Thread {
+	class ServerListener implements Runnable {
 		ArrayList<String> arr;
 		Set<String> set = new HashSet<String>();
 		Random rand = new Random();
