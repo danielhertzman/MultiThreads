@@ -2,7 +2,6 @@ package assignment5;
 
 import java.io.Serializable;
 
-import javax.swing.ImageIcon;
 
 /**
  * General message class
@@ -13,14 +12,12 @@ public class Message implements Serializable {
 	static final int USER = 0, MESSAGE = 1, LOGOUT = 2, OFFLINE = 3;
 	private int type;
 	private String message;
-	private ImageIcon image = null; // Ska implementeras i denna klass!
 	private String[] recipient;
 	private String sender;
 	
 	Message(int type, String message, String[] recipient, String sender) {
 		this.type = type;
 		this.message = message;
-		this.image = image;
 		this.recipient = recipient;
 		this.sender = sender;
 	}

@@ -6,13 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.logging.FileHandler;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 
-import javax.swing.ImageIcon;
 
 /**
  * Server side class
@@ -23,11 +18,8 @@ public class Server {
 	private static int uniqueId; 
 	private ArrayList<ClientHandle> clientList;
 	ArrayList<Message> offMsg = new ArrayList<Message>();
-	private ServerUI gui;
 	private int port;
 	private boolean keepOn;
-	private FileHandler fh;
-	private SimpleFormatter format;
 
 	/**
 	 * Constructor 
@@ -37,16 +29,14 @@ public class Server {
 	 */
 	public Server(int port, ServerUI gui) {
 		this.port = port;
-		this.gui = gui;
 		clientList = new ArrayList<ClientHandle>();
-		// Skapar log för denna session
 	}
 
 	/**
 	 * Start new session and add clients to a list
 	 */
 	public void start() {
-		keepOn = true; // Boolean för att konstant lyssna
+		keepOn = true;
 		try {
 			ServerSocket serverSocket = new ServerSocket(port);
 			System.out.println("Server up and running smooth!");
@@ -69,11 +59,9 @@ public class Server {
 						tc.inputStream.close();
 						tc.outputStream.close();
 						tc.socket.close();
-					} catch (IOException ioE) {
-					}
+					} catch (IOException ioE) {}
 				}
-			} catch (Exception e) {
-			}
+			} catch (Exception e) {}
 		}
 
 		catch (IOException e) {
@@ -129,7 +117,6 @@ public class Server {
 		ObjectOutputStream outputStream;
 		int id;
 		String username;
-		ImageIcon image;
 		Message chatMsg;
 		LinkedList<String> userList = new LinkedList<String>();
 

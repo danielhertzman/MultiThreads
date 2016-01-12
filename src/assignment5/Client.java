@@ -11,9 +11,6 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
 /**
  *Client side class
  * 
@@ -29,7 +26,7 @@ public class Client {
 	private ClientUI client;
 
 	/**
-	 * Konstruktor tar emot användarnamn från UI samt vilket UI som gäller
+	 * Constructor
 	 * @param username
 	 * @param client
 	 */
@@ -52,12 +49,11 @@ public class Client {
 			outputStream = new ObjectOutputStream(socket.getOutputStream());
 		} catch (IOException eIO) {}
 
-		new ServerListener().start(); // Startar tråd för att lyssna på meddelande
+		new ServerListener().start();
 
 		try {
 			outputStream.writeObject(username);
-		} catch (IOException eIO) {
-		}
+		} catch (IOException eIO) {}
 
 		return true;
 	}
@@ -70,8 +66,7 @@ public class Client {
 		try {
 			outputStream.writeObject(msg);
 			outputStream.flush();
-		} catch (IOException e) {
-		}
+		} catch (IOException e) {}
 	}
 
 	/**
@@ -82,8 +77,6 @@ public class Client {
 	class ServerListener extends Thread {
 		ArrayList<String> arr;
 		Set<String> set = new HashSet<String>();
-		ArrayList<Message> offMsg = new ArrayList<Message>(); // För offlinebruk
-		ImageIcon image = null;
 		Random rand = new Random();
 		private SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 
@@ -102,7 +95,6 @@ public class Client {
 						if (msg.getMessage() != null) {
 
 							String message = null;
-							ImageIcon img = null;
 
 
 							if (msg.getMessage() != null) {
@@ -132,15 +124,14 @@ public class Client {
 										String time = df.format(new Date());
 										String messageLf = time + " " + message
 												+ "\n";
-										client.append(messageLf, img);
-										img = null;
+										client.append(messageLf);
 									}
 									
 									if (arr.contains(str)) {
 										String time = df.format(new Date());
 										String messageLf = time + " " + message
 												+ "\n";
-										client.privateAppend(messageLf, img,
+										client.privateAppend(messageLf,
 												str, msg.getSender());
 									}
 									

@@ -2,30 +2,21 @@ package assignment5;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.border.TitledBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.Style;
-import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 /**
@@ -37,31 +28,16 @@ public class ClientUI extends JPanel implements ActionListener {
 	private JButton login = new JButton("Logga In!");
 	private JButton send = new JButton("Skicka!");
 	private JButton logout = new JButton("Logga ut!");
-
 	private Client client;
 	private boolean isConnected;
-
 	private StyledDocument document;
 	private JTextPane chatLbl;
 	private String[] recipients;
-	
 	private String myUsername = "";
-	private String recipient = "";
-
-	private JFileChooser chooser = new JFileChooser();
-	private FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			"'.jpg', '.png', '.gif'", "jpg", "png", "gif");
-
-	private Style imgStyle;
-	private ImageIcon image = null;
-	private JLabel bifogadLbl = new JLabel("Bifogad bild:");
-
 	private DefaultListModel<String> userArray = new DefaultListModel<String>();
 	private JList<String> usersTableView = new JList<String>(userArray);
-
 	private JPanel rightPnl = new JPanel();
 	private JPanel messagePnl = new JPanel();
-
 	private JLabel userLbl = new JLabel("Användarnamn:");
 	private JTextField userTxtField = new JTextField();
 	private JTextField messageField = new JTextField();
@@ -69,7 +45,7 @@ public class ClientUI extends JPanel implements ActionListener {
 	private JLabel groupLbl = new JLabel("<< Mottagare");
 	
 	/**
-	 * Konstruktor designar UI 
+	 * COnstructor that designs UI
 	 */
 	public ClientUI() {
 		isConnected = false;
@@ -91,10 +67,6 @@ public class ClientUI extends JPanel implements ActionListener {
 		logout.setBounds(405, 0, 90, 35);
 		add(logout);
 		logout.addActionListener(this);
-
-		bifogadLbl.setBounds(3, 448, 520, 20);
-		bifogadLbl.setFont(new Font("Helvetica", Font.PLAIN, 11));
-		add(bifogadLbl);
 
 		messageField.setBounds(0, 510, 520, 35);
 		add(messageField);
@@ -128,7 +100,6 @@ public class ClientUI extends JPanel implements ActionListener {
 		add(messagePnl);
 
 		document = new DefaultStyledDocument();
-		imgStyle = document.addStyle("imgStyle", null);
 
 		chatLbl = new JTextPane(document);
 		chatLbl.setAutoscrolls(true);
@@ -148,8 +119,7 @@ public class ClientUI extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Metod som kollar vilket läge användare befinner sig i.
-	 * Uppdateringar för UI sker beroende på isConnected eller ej
+	 * Sets status of buttons
 	 */
 	public void updateState() {
 		if (isConnected == false) {
@@ -166,30 +136,13 @@ public class ClientUI extends JPanel implements ActionListener {
 	}
 	
 	/**
-	 * Tar emot Meddelande och bild för att printa ut i documents 
-	 * @param msg meddelande
-	 * @param image bild
+	 * Puts message in gui
+	 * @param msg 
 	 */
-	public void append(String msg, ImageIcon image) {
+	public void append(String msg) {
 
 		try {
 			document.insertString(document.getLength(), msg, null);
-	
-			if (image != null) {
-
-				// Justering av storlek på bild
-				Image img = image.getImage();
-				Image newimg = img.getScaledInstance(320, 210,
-						java.awt.Image.SCALE_SMOOTH);
-				image = new ImageIcon(newimg);
-				
-				// Sätt bild till document med Style
-				StyleConstants.setIcon(imgStyle, image);
-				document.insertString(document.getLength(), "ignored", imgStyle);
-				document.insertString(document.getLength(), "\n", null);
-				image = null;
-
-			}
 
 		} catch (BadLocationException e) {
 			System.out.print("Något gick fel med documents");
@@ -199,18 +152,17 @@ public class ClientUI extends JPanel implements ActionListener {
 	/**
 	 * Metoden printar ut privat meddelanden mellan användare
 	 * @param msg meddelande
-	 * @param image bild
 	 * @param recipient mottagare
 	 * @param sender avsändare
 	 */
-	public void privateAppend(String msg, ImageIcon image, String recipient, String sender){
+	public void privateAppend(String msg, String recipient, String sender){
 
 		if(myUsername.equals(recipient)){
-			append(msg, image);
+			append(msg);
 		}
 		
 		if(myUsername.equals(sender)){
-			append(msg, image);
+			append(msg);
 		}
 	}	
 
@@ -254,9 +206,6 @@ public class ClientUI extends JPanel implements ActionListener {
 				client.sendMessage(new Message(Message.MESSAGE,
 					messageField.getText(), recipients, myUsername));
 				messageField.setText("");
-				image = null;
-				bifogadLbl.setText("Bifogad bild:");
-				recipient = "";
 				usersTableView.clearSelection();
 				return;		
 			}
