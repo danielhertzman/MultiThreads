@@ -24,7 +24,7 @@ public class BoundedBuffer {
         strArray = new String[MAX];
         status = new BufferStatus[MAX];
 
-        for (int i = 0; i < status.length-1; i+++) {
+        for (int i = 0; i < status.length-1; i++) {
             status[i] = BufferStatus.EMPTY;
         }
     }
